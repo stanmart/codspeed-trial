@@ -1,0 +1,20 @@
+[project]
+name = "codspeed-trial"
+channels = ["conda-forge"]
+platforms = ["osx-arm64", "linux-64"]
+
+[dependencies]
+python = "3.12.*"
+numpy = ">=1.26"
+cython = ">=3.0"
+pytest = ">=7.4"
+pytest-codspeed = ">=2.0"
+cxx-compiler = "*"
+setuptools = ">=68"
+pip = "*"
+
+[tasks]
+build = "pip install -e . --no-build-isolation"
+test = "pytest tests/"
+benchmark = "pytest tests/test_benchmarks.py --codspeed"
+test-overhead = "pytest tests/test_overhead.py -v"
