@@ -14,7 +14,7 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "pytest>=7.4",
-    "pytest-codspeed>=2.0",
+    "pytest-codspeed>=4.2.0",
 ]
 
 [tool.setuptools.packages.find]

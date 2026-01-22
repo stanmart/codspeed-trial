@@ -1,5 +1,7 @@
 # codspeed-trial
 
+[![CodSpeed](https://img.shields.io/badge/CodSpeed-Performance%20Tracked-blue?logo=codspeed)](https://codspeed.io/stanmart/codspeed-trial?utm_source=badge)
+
 Test repository for evaluating CodSpeed continuous benchmarking service.
 
 ## Overview
@@ -49,7 +51,7 @@ pixi run test
 The GitHub Actions workflow (`.github/workflows/codspeed.yml`) automatically:
 - Builds the package on `ubuntu-latest` runners
 - Runs benchmarks with CodSpeed on pushes and PRs
-- Requires `CODSPEED_TOKEN` secret to be set in repository settings
+- Uses OIDC authentication for secure integration with CodSpeed
 
 ## Project Structure
 
