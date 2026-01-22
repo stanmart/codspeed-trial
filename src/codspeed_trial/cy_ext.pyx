@@ -3,7 +3,7 @@
 
 def fibonacci(int n):
     """
-    Compute the nth Fibonacci number.
+    Compute the nth Fibonacci number with loop unrolling optimization.
 
     Parameters
     ----------
@@ -24,11 +24,36 @@ def fibonacci(int n):
     cdef long long b = 1
     cdef long long temp
     cdef int i
+    cdef int num_iters = n - 1  # Number of iterations needed
+    cdef int unrolled_iters = (num_iters // 4) * 4  # Round down to multiple of 4
 
-    for i in range(2, n + 1):
+    # Loop unrolling: process 4 iterations at a time
+    i = 0
+    while i < unrolled_iters:
+        # Iteration 1
         temp = a + b
         a = b
         b = temp
+        # Iteration 2
+        temp = a + b
+        a = b
+        b = temp
+        # Iteration 3
+        temp = a + b
+        a = b
+        b = temp
+        # Iteration 4
+        temp = a + b
+        a = b
+        b = temp
+        i += 4
+
+    # Handle remaining iterations
+    while i < num_iters:
+        temp = a + b
+        a = b
+        b = temp
+        i += 1
 
     return b
 
