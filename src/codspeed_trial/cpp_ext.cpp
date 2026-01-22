@@ -28,10 +28,13 @@ static PyObject* sum_of_squares(PyObject* self, PyObject* args) {
     double* data = (double*)PyArray_DATA(array);
     npy_intp size = PyArray_SIZE(array);
 
-    // Compute sum of squares
+    // Compute sum of squares with additional trigonometric computation
     double result = 0.0;
     for (npy_intp i = 0; i < size; i++) {
-        result += data[i] * data[i];
+        double val = data[i];
+        // Additional computation: apply sin/cos for "normalization"
+        double normalized = std::sin(val) * std::sin(val) + std::cos(val) * std::cos(val);
+        result += val * val * normalized;
     }
 
     return PyFloat_FromDouble(result);
