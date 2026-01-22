@@ -5,6 +5,11 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   benchmark:
@@ -22,7 +27,7 @@ jobs:
         run: pixi run build
 
       - name: Run benchmarks with CodSpeed
-        uses: CodSpeedHQ/action@v3
+        uses: CodSpeedHQ/action@v4
         with:
+          mode: simulation
           run: pixi run benchmark
-          token: ${{ secrets.CODSPEED_TOKEN }}
