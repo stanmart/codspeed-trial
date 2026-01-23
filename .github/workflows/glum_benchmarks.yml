@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   benchmark:
-    runs-on: codspeed-macro
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
