@@ -1850,6 +1850,9 @@ static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject 
 /* RaiseException.export */
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject *cause);
 
+/* DivInt[long].proto */
+static CYTHON_INLINE long __Pyx_div_long(long, long, int b_is_constant);
+
 /* dict_setdefault.proto (used by FetchCommonType) */
 static CYTHON_INLINE PyObject *__Pyx_PyDict_SetDefault(PyObject *d, PyObject *key, PyObject *default_value);
 
@@ -2095,10 +2098,10 @@ static int __Pyx_VectorcallBuilder_AddArgStr(const char *key, PyObject *value, P
 static CYTHON_INLINE PyObject* __Pyx_PyLong_From_int(int value);
 
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyLong_From_long(long value);
+static CYTHON_INLINE PyObject* __Pyx_PyLong_From_PY_LONG_LONG(PY_LONG_LONG value);
 
 /* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyLong_From_PY_LONG_LONG(PY_LONG_LONG value);
+static CYTHON_INLINE PyObject* __Pyx_PyLong_From_long(long value);
 
 /* FormatTypeName.proto */
 #if CYTHON_COMPILING_IN_LIMITED_API
@@ -2246,7 +2249,7 @@ typedef struct {
   __Pyx_CachedCFunction __pyx_umethod_PyDict_Type_pop;
   __Pyx_CachedCFunction __pyx_umethod_PyDict_Type_values;
   PyObject *__pyx_codeobj_tab[2];
-  PyObject *__pyx_string_tab[28];
+  PyObject *__pyx_string_tab[30];
 /* #### Code section: module_state_contents ### */
 /* CommonTypesMetaclass.module_state_decls */
 PyTypeObject *__pyx_CommonTypesMetaclassType;
@@ -2306,15 +2309,17 @@ static __pyx_mstatetype * const __pyx_mstate_global = &__pyx_mstate_global_stati
 #define __pyx_n_u_module __pyx_string_tab[16]
 #define __pyx_n_u_n __pyx_string_tab[17]
 #define __pyx_n_u_name __pyx_string_tab[18]
-#define __pyx_n_u_pop __pyx_string_tab[19]
-#define __pyx_n_u_qualname __pyx_string_tab[20]
-#define __pyx_n_u_set_name __pyx_string_tab[21]
-#define __pyx_n_u_setdefault __pyx_string_tab[22]
-#define __pyx_n_u_temp __pyx_string_tab[23]
-#define __pyx_n_u_test __pyx_string_tab[24]
-#define __pyx_n_u_values __pyx_string_tab[25]
-#define __pyx_kp_b_iso88591_a_r_A_q_q_q_U_3b_r_1_A_A_1 __pyx_string_tab[26]
-#define __pyx_kp_b_iso88591_r_1_j_r_A_q_q_q_U_3b_r_1_A_A_1 __pyx_string_tab[27]
+#define __pyx_n_u_num_iters __pyx_string_tab[19]
+#define __pyx_n_u_pop __pyx_string_tab[20]
+#define __pyx_n_u_qualname __pyx_string_tab[21]
+#define __pyx_n_u_set_name __pyx_string_tab[22]
+#define __pyx_n_u_setdefault __pyx_string_tab[23]
+#define __pyx_n_u_temp __pyx_string_tab[24]
+#define __pyx_n_u_test __pyx_string_tab[25]
+#define __pyx_n_u_unrolled_iters __pyx_string_tab[26]
+#define __pyx_n_u_values __pyx_string_tab[27]
+#define __pyx_kp_b_iso88591_a_r_A_q_q_q_U_3b_r_1_A_A_1 __pyx_string_tab[28]
+#define __pyx_kp_b_iso88591_r_1_j_r_A_q_q_q_2Q_z_Cr_Ba_r_1 __pyx_string_tab[29]
 /* #### Code section: module_state_clear ### */
 #if CYTHON_USE_MODULE_STATE
 static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
@@ -2330,7 +2335,7 @@ static CYTHON_SMALL_CODE int __pyx_m_clear(PyObject *m) {
   __Pyx_State_RemoveModule(NULL);
   #endif
   for (int i=0; i<2; ++i) { Py_CLEAR(clear_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<28; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<30; ++i) { Py_CLEAR(clear_module_state->__pyx_string_tab[i]); }
 /* #### Code section: module_state_clear_contents ### */
 /* CommonTypesMetaclass.module_state_clear */
 Py_CLEAR(clear_module_state->__pyx_CommonTypesMetaclassType);
@@ -2354,7 +2359,7 @@ static CYTHON_SMALL_CODE int __pyx_m_traverse(PyObject *m, visitproc visit, void
   __Pyx_VISIT_CONST(traverse_module_state->__pyx_empty_bytes);
   __Pyx_VISIT_CONST(traverse_module_state->__pyx_empty_unicode);
   for (int i=0; i<2; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_codeobj_tab[i]); }
-  for (int i=0; i<28; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
+  for (int i=0; i<30; ++i) { __Pyx_VISIT_CONST(traverse_module_state->__pyx_string_tab[i]); }
 /* #### Code section: module_state_traverse_contents ### */
 /* CommonTypesMetaclass.module_state_traverse */
 Py_VISIT(traverse_module_state->__pyx_CommonTypesMetaclassType);
@@ -2373,7 +2378,7 @@ return 0;
  * 
  * def fibonacci(int n):             # <<<<<<<<<<<<<<
  *     """
- *     Compute the nth Fibonacci number.
+ *     Compute the nth Fibonacci number with loop unrolling optimization.
 */
 
 /* Python wrapper */
@@ -2384,7 +2389,7 @@ PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-PyDoc_STRVAR(__pyx_doc_14codspeed_trial_6cy_ext_fibonacci, "\n    Compute the nth Fibonacci number.\n\n    Parameters\n    ----------\n    n : int\n        The index of the Fibonacci number to compute (must be >= 0).\n\n    Returns\n    -------\n    int\n        The nth Fibonacci number.\n    ");
+PyDoc_STRVAR(__pyx_doc_14codspeed_trial_6cy_ext_fibonacci, "\n    Compute the nth Fibonacci number with loop unrolling optimization.\n\n    Parameters\n    ----------\n    n : int\n        The index of the Fibonacci number to compute (must be >= 0).\n\n    Returns\n    -------\n    int\n        The nth Fibonacci number.\n    ");
 static PyMethodDef __pyx_mdef_14codspeed_trial_6cy_ext_1fibonacci = {"fibonacci", (PyCFunction)(void(*)(void))(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_14codspeed_trial_6cy_ext_1fibonacci, __Pyx_METH_FASTCALL|METH_KEYWORDS, __pyx_doc_14codspeed_trial_6cy_ext_fibonacci};
 static PyObject *__pyx_pw_14codspeed_trial_6cy_ext_1fibonacci(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
@@ -2466,16 +2471,15 @@ static PyObject *__pyx_pf_14codspeed_trial_6cy_ext_fibonacci(CYTHON_UNUSED PyObj
   PY_LONG_LONG __pyx_v_a;
   PY_LONG_LONG __pyx_v_b;
   PY_LONG_LONG __pyx_v_temp;
-  CYTHON_UNUSED int __pyx_v_i;
+  int __pyx_v_i;
+  int __pyx_v_num_iters;
+  int __pyx_v_unrolled_iters;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   int __pyx_t_1;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   size_t __pyx_t_4;
-  long __pyx_t_5;
-  long __pyx_t_6;
-  int __pyx_t_7;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2571,55 +2575,219 @@ static PyObject *__pyx_pf_14codspeed_trial_6cy_ext_fibonacci(CYTHON_UNUSED PyObj
 */
   __pyx_v_b = 1;
 
+  /* "codspeed_trial/cy_ext.pyx":27
+ *     cdef long long temp
+ *     cdef int i
+ *     cdef int num_iters = n - 1  # Number of iterations needed             # <<<<<<<<<<<<<<
+ *     cdef int unrolled_iters = (num_iters // 4) * 4  # Round down to multiple of 4
+ * 
+*/
+  __pyx_v_num_iters = (__pyx_v_n - 1);
+
   /* "codspeed_trial/cy_ext.pyx":28
  *     cdef int i
+ *     cdef int num_iters = n - 1  # Number of iterations needed
+ *     cdef int unrolled_iters = (num_iters // 4) * 4  # Round down to multiple of 4             # <<<<<<<<<<<<<<
  * 
- *     for i in range(2, n + 1):             # <<<<<<<<<<<<<<
- *         temp = a + b
- *         a = b
+ *     # Loop unrolling: process 4 iterations at a time
 */
-  __pyx_t_5 = (__pyx_v_n + 1);
-  __pyx_t_6 = __pyx_t_5;
-  for (__pyx_t_7 = 2; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
-    __pyx_v_i = __pyx_t_7;
+  __pyx_v_unrolled_iters = (__Pyx_div_long(__pyx_v_num_iters, 4, 1) * 4);
 
-    /* "codspeed_trial/cy_ext.pyx":29
+  /* "codspeed_trial/cy_ext.pyx":31
  * 
- *     for i in range(2, n + 1):
+ *     # Loop unrolling: process 4 iterations at a time
+ *     i = 0             # <<<<<<<<<<<<<<
+ *     while i < unrolled_iters:
+ *         # Iteration 1
+*/
+  __pyx_v_i = 0;
+
+  /* "codspeed_trial/cy_ext.pyx":32
+ *     # Loop unrolling: process 4 iterations at a time
+ *     i = 0
+ *     while i < unrolled_iters:             # <<<<<<<<<<<<<<
+ *         # Iteration 1
+ *         temp = a + b
+*/
+  while (1) {
+    __pyx_t_1 = (__pyx_v_i < __pyx_v_unrolled_iters);
+    if (!__pyx_t_1) break;
+
+    /* "codspeed_trial/cy_ext.pyx":34
+ *     while i < unrolled_iters:
+ *         # Iteration 1
  *         temp = a + b             # <<<<<<<<<<<<<<
  *         a = b
  *         b = temp
 */
     __pyx_v_temp = (__pyx_v_a + __pyx_v_b);
 
-    /* "codspeed_trial/cy_ext.pyx":30
- *     for i in range(2, n + 1):
+    /* "codspeed_trial/cy_ext.pyx":35
+ *         # Iteration 1
  *         temp = a + b
  *         a = b             # <<<<<<<<<<<<<<
  *         b = temp
- * 
+ *         # Iteration 2
 */
     __pyx_v_a = __pyx_v_b;
 
-    /* "codspeed_trial/cy_ext.pyx":31
+    /* "codspeed_trial/cy_ext.pyx":36
  *         temp = a + b
  *         a = b
  *         b = temp             # <<<<<<<<<<<<<<
+ *         # Iteration 2
+ *         temp = a + b
+*/
+    __pyx_v_b = __pyx_v_temp;
+
+    /* "codspeed_trial/cy_ext.pyx":38
+ *         b = temp
+ *         # Iteration 2
+ *         temp = a + b             # <<<<<<<<<<<<<<
+ *         a = b
+ *         b = temp
+*/
+    __pyx_v_temp = (__pyx_v_a + __pyx_v_b);
+
+    /* "codspeed_trial/cy_ext.pyx":39
+ *         # Iteration 2
+ *         temp = a + b
+ *         a = b             # <<<<<<<<<<<<<<
+ *         b = temp
+ *         # Iteration 3
+*/
+    __pyx_v_a = __pyx_v_b;
+
+    /* "codspeed_trial/cy_ext.pyx":40
+ *         temp = a + b
+ *         a = b
+ *         b = temp             # <<<<<<<<<<<<<<
+ *         # Iteration 3
+ *         temp = a + b
+*/
+    __pyx_v_b = __pyx_v_temp;
+
+    /* "codspeed_trial/cy_ext.pyx":42
+ *         b = temp
+ *         # Iteration 3
+ *         temp = a + b             # <<<<<<<<<<<<<<
+ *         a = b
+ *         b = temp
+*/
+    __pyx_v_temp = (__pyx_v_a + __pyx_v_b);
+
+    /* "codspeed_trial/cy_ext.pyx":43
+ *         # Iteration 3
+ *         temp = a + b
+ *         a = b             # <<<<<<<<<<<<<<
+ *         b = temp
+ *         # Iteration 4
+*/
+    __pyx_v_a = __pyx_v_b;
+
+    /* "codspeed_trial/cy_ext.pyx":44
+ *         temp = a + b
+ *         a = b
+ *         b = temp             # <<<<<<<<<<<<<<
+ *         # Iteration 4
+ *         temp = a + b
+*/
+    __pyx_v_b = __pyx_v_temp;
+
+    /* "codspeed_trial/cy_ext.pyx":46
+ *         b = temp
+ *         # Iteration 4
+ *         temp = a + b             # <<<<<<<<<<<<<<
+ *         a = b
+ *         b = temp
+*/
+    __pyx_v_temp = (__pyx_v_a + __pyx_v_b);
+
+    /* "codspeed_trial/cy_ext.pyx":47
+ *         # Iteration 4
+ *         temp = a + b
+ *         a = b             # <<<<<<<<<<<<<<
+ *         b = temp
+ *         i += 4
+*/
+    __pyx_v_a = __pyx_v_b;
+
+    /* "codspeed_trial/cy_ext.pyx":48
+ *         temp = a + b
+ *         a = b
+ *         b = temp             # <<<<<<<<<<<<<<
+ *         i += 4
+ * 
+*/
+    __pyx_v_b = __pyx_v_temp;
+
+    /* "codspeed_trial/cy_ext.pyx":49
+ *         a = b
+ *         b = temp
+ *         i += 4             # <<<<<<<<<<<<<<
+ * 
+ *     # Handle remaining iterations
+*/
+    __pyx_v_i = (__pyx_v_i + 4);
+  }
+
+  /* "codspeed_trial/cy_ext.pyx":52
+ * 
+ *     # Handle remaining iterations
+ *     while i < num_iters:             # <<<<<<<<<<<<<<
+ *         temp = a + b
+ *         a = b
+*/
+  while (1) {
+    __pyx_t_1 = (__pyx_v_i < __pyx_v_num_iters);
+    if (!__pyx_t_1) break;
+
+    /* "codspeed_trial/cy_ext.pyx":53
+ *     # Handle remaining iterations
+ *     while i < num_iters:
+ *         temp = a + b             # <<<<<<<<<<<<<<
+ *         a = b
+ *         b = temp
+*/
+    __pyx_v_temp = (__pyx_v_a + __pyx_v_b);
+
+    /* "codspeed_trial/cy_ext.pyx":54
+ *     while i < num_iters:
+ *         temp = a + b
+ *         a = b             # <<<<<<<<<<<<<<
+ *         b = temp
+ *         i += 1
+*/
+    __pyx_v_a = __pyx_v_b;
+
+    /* "codspeed_trial/cy_ext.pyx":55
+ *         temp = a + b
+ *         a = b
+ *         b = temp             # <<<<<<<<<<<<<<
+ *         i += 1
+ * 
+*/
+    __pyx_v_b = __pyx_v_temp;
+
+    /* "codspeed_trial/cy_ext.pyx":56
+ *         a = b
+ *         b = temp
+ *         i += 1             # <<<<<<<<<<<<<<
  * 
  *     return b
 */
-    __pyx_v_b = __pyx_v_temp;
+    __pyx_v_i = (__pyx_v_i + 1);
   }
 
-  /* "codspeed_trial/cy_ext.pyx":33
- *         b = temp
+  /* "codspeed_trial/cy_ext.pyx":58
+ *         i += 1
  * 
  *     return b             # <<<<<<<<<<<<<<
  * 
  * 
 */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_2 = __Pyx_PyLong_From_PY_LONG_LONG(__pyx_v_b); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyLong_From_PY_LONG_LONG(__pyx_v_b); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
@@ -2630,7 +2798,7 @@ static PyObject *__pyx_pf_14codspeed_trial_6cy_ext_fibonacci(CYTHON_UNUSED PyObj
  * 
  * def fibonacci(int n):             # <<<<<<<<<<<<<<
  *     """
- *     Compute the nth Fibonacci number.
+ *     Compute the nth Fibonacci number with loop unrolling optimization.
 */
 
   /* function exit code */
@@ -2645,7 +2813,7 @@ static PyObject *__pyx_pf_14codspeed_trial_6cy_ext_fibonacci(CYTHON_UNUSED PyObj
   return __pyx_r;
 }
 
-/* "codspeed_trial/cy_ext.pyx":36
+/* "codspeed_trial/cy_ext.pyx":61
  * 
  * 
  * cpdef long long fibonacci_fast(int n) nogil:             # <<<<<<<<<<<<<<
@@ -2671,7 +2839,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
   long __pyx_t_3;
   int __pyx_t_4;
 
-  /* "codspeed_trial/cy_ext.pyx":50
+  /* "codspeed_trial/cy_ext.pyx":75
  *         The nth Fibonacci number.
  *     """
  *     if n <= 1:             # <<<<<<<<<<<<<<
@@ -2681,7 +2849,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
   __pyx_t_1 = (__pyx_v_n <= 1);
   if (__pyx_t_1) {
 
-    /* "codspeed_trial/cy_ext.pyx":51
+    /* "codspeed_trial/cy_ext.pyx":76
  *     """
  *     if n <= 1:
  *         return n             # <<<<<<<<<<<<<<
@@ -2691,7 +2859,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
     __pyx_r = __pyx_v_n;
     goto __pyx_L0;
 
-    /* "codspeed_trial/cy_ext.pyx":50
+    /* "codspeed_trial/cy_ext.pyx":75
  *         The nth Fibonacci number.
  *     """
  *     if n <= 1:             # <<<<<<<<<<<<<<
@@ -2700,7 +2868,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
 */
   }
 
-  /* "codspeed_trial/cy_ext.pyx":53
+  /* "codspeed_trial/cy_ext.pyx":78
  *         return n
  * 
  *     cdef long long a = 0             # <<<<<<<<<<<<<<
@@ -2709,7 +2877,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
 */
   __pyx_v_a = 0;
 
-  /* "codspeed_trial/cy_ext.pyx":54
+  /* "codspeed_trial/cy_ext.pyx":79
  * 
  *     cdef long long a = 0
  *     cdef long long b = 1             # <<<<<<<<<<<<<<
@@ -2718,7 +2886,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
 */
   __pyx_v_b = 1;
 
-  /* "codspeed_trial/cy_ext.pyx":58
+  /* "codspeed_trial/cy_ext.pyx":83
  *     cdef int i
  * 
  *     for i in range(2, n + 1):             # <<<<<<<<<<<<<<
@@ -2730,7 +2898,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
   for (__pyx_t_4 = 2; __pyx_t_4 < __pyx_t_3; __pyx_t_4+=1) {
     __pyx_v_i = __pyx_t_4;
 
-    /* "codspeed_trial/cy_ext.pyx":59
+    /* "codspeed_trial/cy_ext.pyx":84
  * 
  *     for i in range(2, n + 1):
  *         temp = a + b             # <<<<<<<<<<<<<<
@@ -2739,7 +2907,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
 */
     __pyx_v_temp = (__pyx_v_a + __pyx_v_b);
 
-    /* "codspeed_trial/cy_ext.pyx":60
+    /* "codspeed_trial/cy_ext.pyx":85
  *     for i in range(2, n + 1):
  *         temp = a + b
  *         a = b             # <<<<<<<<<<<<<<
@@ -2748,7 +2916,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
 */
     __pyx_v_a = __pyx_v_b;
 
-    /* "codspeed_trial/cy_ext.pyx":61
+    /* "codspeed_trial/cy_ext.pyx":86
  *         temp = a + b
  *         a = b
  *         b = temp             # <<<<<<<<<<<<<<
@@ -2758,7 +2926,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
     __pyx_v_b = __pyx_v_temp;
   }
 
-  /* "codspeed_trial/cy_ext.pyx":63
+  /* "codspeed_trial/cy_ext.pyx":88
  *         b = temp
  * 
  *     return b             # <<<<<<<<<<<<<<
@@ -2766,7 +2934,7 @@ static PY_LONG_LONG __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(int __pyx_v_
   __pyx_r = __pyx_v_b;
   goto __pyx_L0;
 
-  /* "codspeed_trial/cy_ext.pyx":36
+  /* "codspeed_trial/cy_ext.pyx":61
  * 
  * 
  * cpdef long long fibonacci_fast(int n) nogil:             # <<<<<<<<<<<<<<
@@ -2819,32 +2987,32 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   {
     PyObject ** const __pyx_pyargnames[] = {&__pyx_mstate_global->__pyx_n_u_n,0};
     const Py_ssize_t __pyx_kwds_len = (__pyx_kwds) ? __Pyx_NumKwargs_FASTCALL(__pyx_kwds) : 0;
-    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 36, __pyx_L3_error)
+    if (unlikely(__pyx_kwds_len) < 0) __PYX_ERR(0, 61, __pyx_L3_error)
     if (__pyx_kwds_len > 0) {
       switch (__pyx_nargs) {
         case  1:
         values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 36, __pyx_L3_error)
+        if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 61, __pyx_L3_error)
         CYTHON_FALLTHROUGH;
         case  0: break;
         default: goto __pyx_L5_argtuple_error;
       }
       const Py_ssize_t kwd_pos_args = __pyx_nargs;
-      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "fibonacci_fast", 0) < (0)) __PYX_ERR(0, 36, __pyx_L3_error)
+      if (__Pyx_ParseKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values, kwd_pos_args, __pyx_kwds_len, "fibonacci_fast", 0) < (0)) __PYX_ERR(0, 61, __pyx_L3_error)
       for (Py_ssize_t i = __pyx_nargs; i < 1; i++) {
-        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("fibonacci_fast", 1, 1, 1, i); __PYX_ERR(0, 36, __pyx_L3_error) }
+        if (unlikely(!values[i])) { __Pyx_RaiseArgtupleInvalid("fibonacci_fast", 1, 1, 1, i); __PYX_ERR(0, 61, __pyx_L3_error) }
       }
     } else if (unlikely(__pyx_nargs != 1)) {
       goto __pyx_L5_argtuple_error;
     } else {
       values[0] = __Pyx_ArgRef_FASTCALL(__pyx_args, 0);
-      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 36, __pyx_L3_error)
+      if (!CYTHON_ASSUME_SAFE_MACROS && unlikely(!values[0])) __PYX_ERR(0, 61, __pyx_L3_error)
     }
-    __pyx_v_n = __Pyx_PyLong_As_int(values[0]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 36, __pyx_L3_error)
+    __pyx_v_n = __Pyx_PyLong_As_int(values[0]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 61, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("fibonacci_fast", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 36, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("fibonacci_fast", 1, 1, 1, __pyx_nargs); __PYX_ERR(0, 61, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -2875,8 +3043,8 @@ static PyObject *__pyx_pf_14codspeed_trial_6cy_ext_2fibonacci_fast(CYTHON_UNUSED
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("fibonacci_fast", 0);
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(__pyx_v_n, 1); if (unlikely(__pyx_t_1 == ((PY_LONG_LONG)-1LL) && PyErr_Occurred())) __PYX_ERR(0, 36, __pyx_L1_error)
-  __pyx_t_2 = __Pyx_PyLong_From_PY_LONG_LONG(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_14codspeed_trial_6cy_ext_fibonacci_fast(__pyx_v_n, 1); if (unlikely(__pyx_t_1 == ((PY_LONG_LONG)-1LL) && PyErr_Occurred())) __PYX_ERR(0, 61, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyLong_From_PY_LONG_LONG(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_r = __pyx_t_2;
   __pyx_t_2 = 0;
@@ -3246,7 +3414,7 @@ __Pyx_RefNannySetupContext("PyInit_cy_ext", 0);
  * 
  * def fibonacci(int n):             # <<<<<<<<<<<<<<
  *     """
- *     Compute the nth Fibonacci number.
+ *     Compute the nth Fibonacci number with loop unrolling optimization.
 */
   __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_14codspeed_trial_6cy_ext_1fibonacci, 0, __pyx_mstate_global->__pyx_n_u_fibonacci, NULL, __pyx_mstate_global->__pyx_n_u_codspeed_trial_cy_ext, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[0])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -3256,19 +3424,19 @@ __Pyx_RefNannySetupContext("PyInit_cy_ext", 0);
   if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_fibonacci, __pyx_t_2) < (0)) __PYX_ERR(0, 4, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "codspeed_trial/cy_ext.pyx":36
+  /* "codspeed_trial/cy_ext.pyx":61
  * 
  * 
  * cpdef long long fibonacci_fast(int n) nogil:             # <<<<<<<<<<<<<<
  *     """
  *     Fast Fibonacci computation with GIL released.
 */
-  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_14codspeed_trial_6cy_ext_3fibonacci_fast, 0, __pyx_mstate_global->__pyx_n_u_fibonacci_fast, NULL, __pyx_mstate_global->__pyx_n_u_codspeed_trial_cy_ext, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[1])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_CyFunction_New(&__pyx_mdef_14codspeed_trial_6cy_ext_3fibonacci_fast, 0, __pyx_mstate_global->__pyx_n_u_fibonacci_fast, NULL, __pyx_mstate_global->__pyx_n_u_codspeed_trial_cy_ext, __pyx_mstate_global->__pyx_d, ((PyObject *)__pyx_mstate_global->__pyx_codeobj_tab[1])); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   #if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030E0000
   PyUnstable_Object_EnableDeferredRefcount(__pyx_t_2);
   #endif
-  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_fibonacci_fast, __pyx_t_2) < (0)) __PYX_ERR(0, 36, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_mstate_global->__pyx_d, __pyx_mstate_global->__pyx_n_u_fibonacci_fast, __pyx_t_2) < (0)) __PYX_ERR(0, 61, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
   /* "codspeed_trial/cy_ext.pyx":1
@@ -3341,31 +3509,31 @@ static int __Pyx_InitCachedConstants(__pyx_mstatetype *__pyx_mstate) {
 static int __Pyx_InitConstants(__pyx_mstatetype *__pyx_mstate) {
   CYTHON_UNUSED_VAR(__pyx_mstate);
   {
-    const struct { const unsigned int length: 7; } index[] = {{1},{22},{29},{20},{1},{18},{1},{18},{21},{9},{14},{8},{1},{13},{5},{8},{10},{1},{8},{3},{12},{12},{10},{4},{8},{6},{74},{89}};
-    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (341 bytes) */
-const char* const cstring = "BZh91AY&SY-h\237\364\000\000*\177\343\366\355\270\205`\003\250\000\244\001R\000\277\277\377`@@@@@@@\000@\0000\001\03350\324\321\006\247\251\264\230\217@j\000\000\000\320\000\032\231\023\023SM\0004\000\000\000\014G\250h%S\3252<\241\240\003@\320\000\000\000\036\024\252(fA\237Pk\201\005\203H\336E\000S\010J0\002\347<B P\267\313\315\201\2413J\276\207H0\021\rF\021E\2041 \301\320h\"\016\211N\372\225\023\310\240T\"v\205\231\242\002\001\222\203\231#\354\377\032?P\2641\377\016H\352\364p\270#s\221d\031\355}\256J\324\203\2541\246K\032B\005\276(\036\350t(\024\347\242Q\037\242Q\024\217!\020\035\202\350z\256A]\241Ijq)b\231\231\222\311\031\030/\373\222\243\010\304I\020\343\203\321\006\224B\211i\024\270\030\026\364\301u\025\340\300BWH>4\231\320\230Y*\232\020\311\316E\006!\031\302\004*\260\362BPi\377\025\227\033\014a\365R\026o\221\010\2176]\034\013\210\250\334\207n\203\270!\310\363\350\0248P\301\243\001\372\317\314\035#\263\222\017\021\010\304!\005\346\376.\344\212p\241 Z\321?\350";
-    PyObject *data = __Pyx_DecompressString(cstring, 341, 2);
+    const struct { const unsigned int length: 8; } index[] = {{1},{22},{29},{20},{1},{18},{1},{18},{21},{9},{14},{8},{1},{13},{5},{8},{10},{1},{8},{9},{3},{12},{12},{10},{4},{8},{14},{6},{74},{207}};
+    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (415 bytes) */
+const char* const cstring = "BZh91AY&SY\262\260\027r\000\000C\177\373\367\377\270\225\360\003\270\000\274\001r\000\277\277\377p@@@@\000@@\000@@@\000@\0000\001[4Hi\022\r\030\230\2324\320hh\000\032\003@h\001\223\020ja\032\215L\246\230\236)\262\200h\000\000\003@\304\311\246A\242\243& 44\003 \311\241\221\240\032\003@i\220\005\204\244\314{\306<\307\034\217\203\350\006R\301#\370\247\232\000\200D\314\250\000\201\230\232DA=2h\016C\032`\003DZL\330\275\243\030\205\307\211\260\233\303\007\023\037J\000\006\246\212\035\005\022\222\003\320n\"\023N\263gE,\304OX\214\222\010\036lj\346 %@y\020g\374dDQ\314)\260Bv\005%W\336\220iT\222*`\347Z'\330~z\007P\231l\221e\263\004\324Bh\254~\327\001\020\n\371\327H\271\224\242Ev\010\223\235\002\261\225j}\311\002\244\204\022\305\200\235\222\205R&7oJ,\306\326\330\214E\004\273o\373!\"\275&\027\356\323X\255\341D\360\251\326GhP\010R\362\023H5\2073\230;\005\255W\3256\310\266\267\257\232\031\333\300/\030Ar\323\243\t\301\024\n\254fNS\r\314Z\220\240\235p\251B\270\226z\267\260e\330m\241\242y\343\016\234\000\017\203\001\350s\033 \017\365\000$\n)\340\276A\350\010\335\363\363\3320\301\014\214\306\263\221&\350\221\300R\000\010\207U*\217\004\345eP\313\376.\344\212p\241!e`.\344";
+    PyObject *data = __Pyx_DecompressString(cstring, 415, 2);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (282 bytes) */
-const char* const cstring = "x\332\245\216\301J\303@\020\206[I0\242(\326\203\027\221\366\001L)>\200\010\236\245\010=\017\223\315DV\223\335$\273[\232[\217{\3141\217\3451\307>B\037\301\t\325\202g\367\360\357?3?\337\314\223\232\026\316\330iBS\245\325\203\242w\264rM\246\026s\241SS\022\245`k\211\371\\4@\033\033\227\315\006`\311\262l^\244\260\360\312\3157\312\020M\243\204\324\261\320\265vV*2\211\310\371\003\251\030\200\202\022\024\237\177\221\361\001\231\311D+\024B\036\rdh,@\346\224\000\220 \r\034\251\322Ra\000\nd,\277B\247.'\000.\024\026lJ]\002T\016\363C\t`\310\376\214\330\245|\250\313-38eiX\262\306\334\221\371\032\335w\270\277\033\205\321\266\3667\376\271\217\256|\265\013n\333\252\037d\037\215\3023\037\372U;k\037\333\244;\351fC\242n'\355\242\217.\206<\313.8\367\213\355\370\0273\361<\273\364\037\335\270\273\356\203\323\377\202\277\001\301x\241\244";
-    PyObject *data = __Pyx_DecompressString(cstring, 282, 1);
+    #elif (CYTHON_COMPRESS_STRINGS) != 0 /* compression: zlib (353 bytes) */
+const char* const cstring = "x\332\235\217\275N\3030\024\205S\224@J\371Q\333\001\t!h\331i\005<\000\342gF-\022\363\225\3438\310\220\330ilW\rSG\217\031\375\010\035y\024\306\214}\204>\002N\013\225\220\312\202\207\353\353\343\343\357\\\337\260N\242\204\354\004\244\3038\273`\344\005I:&\"\303}\314C\221\022\022\202\314(\212\3738\0072\221\2754\237\000\014l\031\344\017\024Kx\264\342\023\211\020\0229\303\224\3670\317\270\222\224\021\021\340\330n@\231\005 L\002\204\337~#{+dD\003\316\020\306t\335@\204\204\004\210\024\303\000\024\250\2005\225J\222\010\200\004Y\254]\t\017UL\000\354\201\241\244jT\002\326\223\211\224\247\000#\205\342\225\016 \210\374\366\330.\264\023\253XZ\230uIR\245)\226\3618\266\263-\237\217Q\254\210\370tN\rZ\2348\236?\315t[\337\226\376\241\036\315\335\243bTVe\341;^]{\372\271\350\026\327E`\266L\267rdE\253\270,\375\275\312o\313\334m\350\313i\355\007\323\322\366\356@\277\232\232i\226\356\316f\360\266\343\035\233\226\2712\303\322=3\357\263\366\354~\226}4+\275\256k\245\273\253\317\365\235F\363\ri\377\225J\177_\017\253\200\306\212]\376aY~\347\013\343(\324\363";
+    PyObject *data = __Pyx_DecompressString(cstring, 353, 1);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
     const char* const bytes = __Pyx_PyBytes_AsString(data);
     #if !CYTHON_ASSUME_SAFE_MACROS
     if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
     #endif
-    #else /* compression: none (426 bytes) */
-const char* const bytes = "?n must be non-negativesrc/codspeed_trial/cy_ext.pyx__Pyx_PyDict_NextRefaasyncio.coroutinesbcline_in_tracebackcodspeed_trial.cy_extfibonaccifibonacci_fast__func__i_is_coroutineitems__main____module__n__name__pop__qualname____set_name__setdefaulttemp__test__values\320\000\036\230a\360\034\000\005\010\200r\210\023\210A\330\010\017\210q\340\004\027\220q\330\004\027\220q\360\010\000\005\t\210\005\210U\220!\2203\220b\230\002\230!\330\010\017\210r\220\022\2201\330\010\014\210A\330\010\014\210A\340\004\013\2101\200\001\360\034\000\005\010\200r\210\022\2101\330\010\016\210j\230\001\230\021\330\004\007\200r\210\023\210A\330\010\017\210q\340\004\027\220q\330\004\027\220q\360\010\000\005\t\210\005\210U\220!\2203\220b\230\002\230!\330\010\017\210r\220\022\2201\330\010\014\210A\330\010\014\210A\340\004\013\2101";
+    #else /* compression: none (567 bytes) */
+const char* const bytes = "?n must be non-negativesrc/codspeed_trial/cy_ext.pyx__Pyx_PyDict_NextRefaasyncio.coroutinesbcline_in_tracebackcodspeed_trial.cy_extfibonaccifibonacci_fast__func__i_is_coroutineitems__main____module__n__name__num_iterspop__qualname____set_name__setdefaulttemp__test__unrolled_itersvalues\320\000\036\230a\360\034\000\005\010\200r\210\023\210A\330\010\017\210q\340\004\027\220q\330\004\027\220q\360\010\000\005\t\210\005\210U\220!\2203\220b\230\002\230!\330\010\017\210r\220\022\2201\330\010\014\210A\330\010\014\210A\340\004\013\2101\200\001\360\034\000\005\010\200r\210\022\2101\330\010\016\210j\230\001\230\021\330\004\007\200r\210\023\210A\330\010\017\210q\340\004\027\220q\330\004\027\220q\360\006\000\005\032\230\022\2302\230Q\330\004\037\230z\250\023\250C\250r\260\021\360\006\000\005\t\210\001\330\004\n\210\"\210B\210a\340\010\017\210r\220\022\2201\330\010\014\210A\330\010\014\210A\340\010\017\210r\220\022\2201\330\010\014\210A\330\010\014\210A\340\010\017\210r\220\022\2201\330\010\014\210A\330\010\014\210A\340\010\017\210r\220\022\2201\330\010\014\210A\330\010\014\210A\330\010\r\210Q\360\006\000\005\013\210\"\210B\210a\330\010\017\210r\220\022\2201\330\010\014\210A\330\010\014\210A\330\010\r\210Q\340\004\013\2101";
     PyObject *data = NULL;
     CYTHON_UNUSED_VAR(__Pyx_DecompressString);
     #endif
     PyObject **stringtab = __pyx_mstate->__pyx_string_tab;
     Py_ssize_t pos = 0;
-    for (int i = 0; i < 26; i++) {
+    for (int i = 0; i < 28; i++) {
       Py_ssize_t bytes_length = index[i].length;
       PyObject *string = PyUnicode_DecodeUTF8(bytes + pos, bytes_length, NULL);
       if (likely(string) && i >= 3) PyUnicode_InternInPlace(&string);
@@ -3376,7 +3544,7 @@ const char* const bytes = "?n must be non-negativesrc/codspeed_trial/cy_ext.pyx_
       stringtab[i] = string;
       pos += bytes_length;
     }
-    for (int i = 26; i < 28; i++) {
+    for (int i = 28; i < 30; i++) {
       Py_ssize_t bytes_length = index[i].length;
       PyObject *string = PyBytes_FromStringAndSize(bytes + pos, bytes_length);
       stringtab[i] = string;
@@ -3387,14 +3555,14 @@ const char* const bytes = "?n must be non-negativesrc/codspeed_trial/cy_ext.pyx_
       }
     }
     Py_XDECREF(data);
-    for (Py_ssize_t i = 0; i < 28; i++) {
+    for (Py_ssize_t i = 0; i < 30; i++) {
       if (unlikely(PyObject_Hash(stringtab[i]) == -1)) {
         __PYX_ERR(0, 1, __pyx_L1_error)
       }
     }
     #if CYTHON_IMMORTAL_CONSTANTS
     {
-      PyObject **table = stringtab + 26;
+      PyObject **table = stringtab + 28;
       for (Py_ssize_t i=0; i<2; ++i) {
         #if CYTHON_COMPILING_IN_CPYTHON_FREETHREADING
         #if PY_VERSION_HEX < 0x030E0000
@@ -3440,12 +3608,12 @@ static int __Pyx_CreateCodeObjects(__pyx_mstatetype *__pyx_mstate) {
   PyObject* tuple_dedup_map = PyDict_New();
   if (unlikely(!tuple_dedup_map)) return -1;
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 5, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 4};
-    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_n, __pyx_mstate->__pyx_n_u_a, __pyx_mstate->__pyx_n_u_b, __pyx_mstate->__pyx_n_u_temp, __pyx_mstate->__pyx_n_u_i};
-    __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_codspeed_trial_cy_ext_pyx, __pyx_mstate->__pyx_n_u_fibonacci, __pyx_mstate->__pyx_kp_b_iso88591_r_1_j_r_A_q_q_q_U_3b_r_1_A_A_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 7, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 4};
+    PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_n, __pyx_mstate->__pyx_n_u_a, __pyx_mstate->__pyx_n_u_b, __pyx_mstate->__pyx_n_u_temp, __pyx_mstate->__pyx_n_u_i, __pyx_mstate->__pyx_n_u_num_iters, __pyx_mstate->__pyx_n_u_unrolled_iters};
+    __pyx_mstate_global->__pyx_codeobj_tab[0] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_codspeed_trial_cy_ext_pyx, __pyx_mstate->__pyx_n_u_fibonacci, __pyx_mstate->__pyx_kp_b_iso88591_r_1_j_r_A_q_q_q_2Q_z_Cr_Ba_r_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[0])) goto bad;
   }
   {
-    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 36};
+    const __Pyx_PyCode_New_function_description descr = {1, 0, 0, 1, (unsigned int)(CO_OPTIMIZED|CO_NEWLOCALS), 61};
     PyObject* const varnames[] = {__pyx_mstate->__pyx_n_u_n};
     __pyx_mstate_global->__pyx_codeobj_tab[1] = __Pyx_PyCode_New(descr, varnames, __pyx_mstate->__pyx_kp_u_src_codspeed_trial_cy_ext_pyx, __pyx_mstate->__pyx_n_u_fibonacci_fast, __pyx_mstate->__pyx_kp_b_iso88591_a_r_A_q_q_q_U_3b_r_1_A_A_1, tuple_dedup_map); if (unlikely(!__pyx_mstate_global->__pyx_codeobj_tab[1])) goto bad;
   }
@@ -4730,6 +4898,17 @@ static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject 
 bad:
     Py_XDECREF(owned_instance);
     return;
+}
+
+/* DivInt[long] */
+static CYTHON_INLINE long __Pyx_div_long(long a, long b, int b_is_constant) {
+    long q = a / b;
+    long r = a - q*b;
+    long adapt_python = (b_is_constant ?
+        ((r != 0) & ((r < 0) ^ (b < 0))) :
+        ((r != 0) & ((r ^ b) < 0))
+    );
+    return q - adapt_python;
 }
 
 /* dict_setdefault (used by FetchCommonType) */
@@ -7035,75 +7214,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyLong_From_int(int value) {
 }
 
 /* CIntToPy */
-static CYTHON_INLINE PyObject* __Pyx_PyLong_From_long(long value) {
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-    const long neg_one = (long) -1, const_zero = (long) 0;
-#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
-#pragma GCC diagnostic pop
-#endif
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(long) < sizeof(long)) {
-            return PyLong_FromLong((long) value);
-        } else if (sizeof(long) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#if !CYTHON_COMPILING_IN_PYPY
-        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(long) <= sizeof(long)) {
-            return PyLong_FromLong((long) value);
-        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-        }
-    }
-    {
-        unsigned char *bytes = (unsigned char *)&value;
-#if !CYTHON_COMPILING_IN_LIMITED_API && PY_VERSION_HEX >= 0x030d00A4
-        if (is_unsigned) {
-            return PyLong_FromUnsignedNativeBytes(bytes, sizeof(value), -1);
-        } else {
-            return PyLong_FromNativeBytes(bytes, sizeof(value), -1);
-        }
-#elif !CYTHON_COMPILING_IN_LIMITED_API && PY_VERSION_HEX < 0x030d0000
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        return _PyLong_FromByteArray(bytes, sizeof(long),
-                                     little, !is_unsigned);
-#else
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        PyObject *from_bytes, *result = NULL, *kwds = NULL;
-        PyObject *py_bytes = NULL, *order_str = NULL;
-        from_bytes = PyObject_GetAttrString((PyObject*)&PyLong_Type, "from_bytes");
-        if (!from_bytes) return NULL;
-        py_bytes = PyBytes_FromStringAndSize((char*)bytes, sizeof(long));
-        if (!py_bytes) goto limited_bad;
-        order_str = PyUnicode_FromString(little ? "little" : "big");
-        if (!order_str) goto limited_bad;
-        {
-            PyObject *args[3+(CYTHON_VECTORCALL ? 1 : 0)] = { NULL, py_bytes, order_str };
-            if (!is_unsigned) {
-                kwds = __Pyx_MakeVectorcallBuilderKwds(1);
-                if (!kwds) goto limited_bad;
-                if (__Pyx_VectorcallBuilder_AddArgStr("signed", __Pyx_NewRef(Py_True), kwds, args+3, 0) < 0) goto limited_bad;
-            }
-            result = __Pyx_Object_Vectorcall_CallFromBuilder(from_bytes, args+1, 2 | __Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET, kwds);
-        }
-        limited_bad:
-        Py_XDECREF(kwds);
-        Py_XDECREF(order_str);
-        Py_XDECREF(py_bytes);
-        Py_XDECREF(from_bytes);
-        return result;
-#endif
-    }
-}
-
-/* CIntToPy */
 static CYTHON_INLINE PyObject* __Pyx_PyLong_From_PY_LONG_LONG(PY_LONG_LONG value) {
 #ifdef __Pyx_HAS_GCC_DIAGNOSTIC
 #pragma GCC diagnostic push
@@ -7150,6 +7260,75 @@ static CYTHON_INLINE PyObject* __Pyx_PyLong_From_PY_LONG_LONG(PY_LONG_LONG value
         from_bytes = PyObject_GetAttrString((PyObject*)&PyLong_Type, "from_bytes");
         if (!from_bytes) return NULL;
         py_bytes = PyBytes_FromStringAndSize((char*)bytes, sizeof(PY_LONG_LONG));
+        if (!py_bytes) goto limited_bad;
+        order_str = PyUnicode_FromString(little ? "little" : "big");
+        if (!order_str) goto limited_bad;
+        {
+            PyObject *args[3+(CYTHON_VECTORCALL ? 1 : 0)] = { NULL, py_bytes, order_str };
+            if (!is_unsigned) {
+                kwds = __Pyx_MakeVectorcallBuilderKwds(1);
+                if (!kwds) goto limited_bad;
+                if (__Pyx_VectorcallBuilder_AddArgStr("signed", __Pyx_NewRef(Py_True), kwds, args+3, 0) < 0) goto limited_bad;
+            }
+            result = __Pyx_Object_Vectorcall_CallFromBuilder(from_bytes, args+1, 2 | __Pyx_PY_VECTORCALL_ARGUMENTS_OFFSET, kwds);
+        }
+        limited_bad:
+        Py_XDECREF(kwds);
+        Py_XDECREF(order_str);
+        Py_XDECREF(py_bytes);
+        Py_XDECREF(from_bytes);
+        return result;
+#endif
+    }
+}
+
+/* CIntToPy */
+static CYTHON_INLINE PyObject* __Pyx_PyLong_From_long(long value) {
+#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#endif
+    const long neg_one = (long) -1, const_zero = (long) 0;
+#ifdef __Pyx_HAS_GCC_DIAGNOSTIC
+#pragma GCC diagnostic pop
+#endif
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(long) < sizeof(long)) {
+            return PyLong_FromLong((long) value);
+        } else if (sizeof(long) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#if !CYTHON_COMPILING_IN_PYPY
+        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
+#endif
+        }
+    } else {
+        if (sizeof(long) <= sizeof(long)) {
+            return PyLong_FromLong((long) value);
+        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+        }
+    }
+    {
+        unsigned char *bytes = (unsigned char *)&value;
+#if !CYTHON_COMPILING_IN_LIMITED_API && PY_VERSION_HEX >= 0x030d00A4
+        if (is_unsigned) {
+            return PyLong_FromUnsignedNativeBytes(bytes, sizeof(value), -1);
+        } else {
+            return PyLong_FromNativeBytes(bytes, sizeof(value), -1);
+        }
+#elif !CYTHON_COMPILING_IN_LIMITED_API && PY_VERSION_HEX < 0x030d0000
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        return _PyLong_FromByteArray(bytes, sizeof(long),
+                                     little, !is_unsigned);
+#else
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        PyObject *from_bytes, *result = NULL, *kwds = NULL;
+        PyObject *py_bytes = NULL, *order_str = NULL;
+        from_bytes = PyObject_GetAttrString((PyObject*)&PyLong_Type, "from_bytes");
+        if (!from_bytes) return NULL;
+        py_bytes = PyBytes_FromStringAndSize((char*)bytes, sizeof(long));
         if (!py_bytes) goto limited_bad;
         order_str = PyUnicode_FromString(little ? "little" : "big");
         if (!order_str) goto limited_bad;
