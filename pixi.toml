@@ -12,6 +12,8 @@ pytest-codspeed = ">=4.2.0"
 cxx-compiler = "*"
 setuptools = ">=68"
 pip = "*"
+glum = "*"
+pandas = "*"
 
 [tasks]
 build = "pip install -e . --no-build-isolation"

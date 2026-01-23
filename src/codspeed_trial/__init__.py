@@ -13,4 +13,11 @@ try:
 except ImportError:
     fibonacci = None
 
-__all__ = ["cpp_sum_of_squares", "fibonacci"]
+from .glum_thing import create_logistic_dataset, fit_logistic_regression
+
+__all__ = [
+    "cpp_sum_of_squares",
+    "fibonacci",
+    "create_logistic_dataset",
+    "fit_logistic_regression",
+]
