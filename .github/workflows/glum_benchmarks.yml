@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   benchmark:
-    runs-on: ubuntu-latest
+    runs-on: codspeed-macro
     steps:
       - uses: actions/checkout@v4
 
@@ -32,5 +32,5 @@ jobs:
       - name: Run benchmarks with CodSpeed
         uses: CodSpeedHQ/action@v4
         with:
-          mode: simulation
+          mode: walltime  # way too slow with simulation
           run: pixi run pytest --codspeed tests/test_glum_codspeed.py
