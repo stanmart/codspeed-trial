@@ -29,5 +29,5 @@ jobs:
       - name: Run benchmarks with CodSpeed
         uses: CodSpeedHQ/action@v4
         with:
-          mode: simulation
+          mode: walltime  # way too slow with simulation
           run: pixi run benchmark
